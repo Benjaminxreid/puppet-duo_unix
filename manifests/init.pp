@@ -21,7 +21,7 @@ class duo_unix (
   $accept_env_factor = 'no',
   $manage_ssh = true,
   $manage_pam = true,
-  $pam_unix_control = 'requisite',
+  $pam_unix_control = 'substack',
   $package_version = 'installed',
 ) {
   if $ikey == '' or $skey == '' or $host == '' {
@@ -40,7 +40,7 @@ class duo_unix (
 
       $pam_file = $::operatingsystemrelease ? {
         /^5/ => '/etc/pam.d/system-auth',
-        /^(6|7|2014)/ => '/etc/pam.d/password-auth'
+        /^(6|7|2014)/ => '/etc/pam.d/sshd'
       }
 
       $pam_module  = $::architecture ? {
