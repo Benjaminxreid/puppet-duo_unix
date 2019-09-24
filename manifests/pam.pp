@@ -44,6 +44,11 @@ class duo_unix::pam inherits duo_unix {
         require => Package[$duo_unix::duo_package],
         onlyif  => "match ${aug_match} size == 0";
       }
+      file_line { 'clean_old_duo':
+        ensure => absent,
+        path => '/etc/pam.d/password-auth',
+        line => 'auth sufficient /lib64/security/pam_duo.so',
+      }
 
     } else {
       augeas { 'PAM Configuration':
