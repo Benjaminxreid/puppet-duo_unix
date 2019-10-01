@@ -23,6 +23,7 @@ class duo_unix (
   $manage_pam = true,
   $pam_unix_control = 'substack',
   $package_version = 'installed',
+  $authentication_method = 'password',
 ) {
   if $ikey == '' or $skey == '' or $host == '' {
     fail('ikey, skey, and host must all be defined.')

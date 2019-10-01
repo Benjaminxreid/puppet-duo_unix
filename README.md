@@ -1,5 +1,6 @@
-# duo_unix Puppet v3 Module (Dev Status: Inactive)
+# duo_unix Puppet v4 Module (Dev Status: Inactive)
 
+:exclamation: **Addional cleanup is still required;.**
 :exclamation: **This project was archived on 2/20/2018.**
 
 ## Table of Contents
@@ -78,6 +79,10 @@ while others are optional.
 #### `host [required]`
   Configures the API host (*host*) value.
 
+#### `authentication_method [required]`
+  Configure pam.d sshd to use either password or pubickey.
+  The default is *password*.
+
 #### `fallback_local_ip [optional]`
   Configures whether or not to fallback to the server's IP. Valid options are 
   *yes* and *no*. The default is *no*.
@@ -139,16 +144,8 @@ best-effort support for this module.
 
 The module has been tested on:
 
-* RedHat Enterprise Linux 6.4 (32/64-bit)
+* RedHat Enterprise Linux 8.0 (64-bit)
 * RedHat Enterprise Linux 7.0 (64-bit)
-* CentOS 5.11 (32/64-bit)
-* CentOS 6.7 (32/64-bit)
-* CentOS 7.1 (64-bit)
-* Debian 6.0.10 (32/64-bit)
-* Debian 7.9 (32/64-bit)
-* Debian 8.2 (32/64-bit)
-* Ubuntu 12.04.5 (32/64-bit)
-* Ubuntu 14.04.3 (32/64-bit)
 
 If you test the module on other Linux distributions (or different versions of 
 the above), please provide feedback as able on successes or failures. 

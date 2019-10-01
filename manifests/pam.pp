@@ -33,21 +33,32 @@ class duo_unix::pam inherits duo_unix {
 
   if $duo_unix::manage_pam {
     if $::osfamily == 'RedHat' {
-      augeas { 'PAM Configuration':
-        changes => [
-          "set ${aug_pam_path}/2/control ${duo_unix::pam_unix_control}",
-          "ins 100 after ${aug_pam_path}/2",
-          "set ${aug_pam_path}/100/type auth",
-          "set ${aug_pam_path}/100/control sufficient",
-          "set ${aug_pam_path}/100/module ${duo_unix::pam_module}"
-        ],
-        require => Package[$duo_unix::duo_package],
-        onlyif  => "match ${aug_match} size == 0";
-      }
-      file_line { 'clean_old_duo':
-        ensure => absent,
-        path => '/etc/pam.d/password-auth',
-        line => 'auth sufficient /lib64/security/pam_duo.so',
+      if versioncmp($::operatingsystemmajrelease, '7') >= 0 {
+        file { '/etc/pam.d/sshd':
+          ensure  => present,
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0644',
+          content => template('duo_unix/pam.sshd.erb'),
+          require => Package[$duo_unix::duo_package];
+        }
+        file_line { 'clean_old_duo':
+          ensure => absent,
+          path => '/etc/pam.d/password-auth',
+          line => 'auth sufficient /lib64/security/pam_duo.so',
+        }
+      } else {
+          augeas { 'PAM Configuration':
+            changes => [
+              "set ${aug_pam_path}/2/control ${duo_unix::pam_unix_control}",
+              "ins 100 after ${aug_pam_path}/2",
+              "set ${aug_pam_path}/100/type auth",
+              "set ${aug_pam_path}/100/control sufficient",
+              "set ${aug_pam_path}/100/module ${duo_unix::pam_module}"
+            ],
+            require => Package[$duo_unix::duo_package],
+            onlyif  => "match ${aug_match} size == 0";
+          }
       }
 
     } else {
